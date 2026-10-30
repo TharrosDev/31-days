@@ -60,7 +60,7 @@
     .content {
       position: relative;
       z-index: 1;
-      width: min(100%, 760px);
+      width: min(100%, 820px);
       text-align: center;
     }
 
@@ -70,77 +70,93 @@
       font-family: var(--site-font-heading);
       font-size: clamp(34px, 6.5vw, calc(66px * var(--site-heading-scale)));
       font-weight: 750;
-      letter-spacing: -0.065em;
+      letter-spacing: -0.06em;
       line-height: 1.02;
+      text-wrap: balance;
     }
 
     .countdown {
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: clamp(38px, 7vw, 68px);
+      margin-top: clamp(48px, 8vh, 82px);
     }
 
     .hours-block {
       display: flex;
-      align-items: baseline;
+      flex-direction: column;
+      align-items: center;
       justify-content: center;
-      gap: 16px;
+      gap: 13px;
     }
 
     .hours-number {
       display: block;
-      font-size: clamp(112px, 23vw, 218px);
-      font-weight: 720;
-      letter-spacing: -0.095em;
+      font-size: clamp(124px, 25vw, 250px);
+      font-weight: 740;
+      letter-spacing: -0.09em;
       line-height: 0.82;
       font-variant-numeric: tabular-nums lining-nums;
       white-space: nowrap;
     }
 
     .hours-label {
-      color: #a0a0a0;
-      font-size: clamp(12px, 1.7vw, 15px);
+      color: #858585;
+      font-size: 11px;
       font-weight: 650;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       white-space: nowrap;
     }
 
     .time-units {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: center;
-      gap: clamp(22px, 5vw, 48px);
-      margin-top: clamp(32px, 5vw, 48px);
+      gap: clamp(20px, 4vw, 34px);
+      margin-top: clamp(34px, 5vw, 44px);
+      padding: 22px 32px;
+      border: 1px solid #202020;
+      border-radius: 14px;
+      background: #0b0b0b;
     }
 
     .unit {
-      min-width: 54px;
+      min-width: 62px;
     }
 
     .unit-value {
       display: block;
-      color: #ededed;
-      font-size: clamp(24px, 4vw, 35px);
-      font-weight: 560;
-      letter-spacing: -0.045em;
+      color: #f0f0f0;
+      font-size: clamp(27px, 4vw, 36px);
+      font-weight: 620;
+      letter-spacing: -0.05em;
       line-height: 1;
       font-variant-numeric: tabular-nums lining-nums;
     }
 
+    .unit-separator {
+      align-self: center;
+      padding-bottom: 15px;
+      color: #454545;
+      font-size: 28px;
+      font-weight: 300;
+      line-height: 1;
+    }
+
     .unit-label {
       display: block;
-      margin-top: 10px;
+      margin-top: 9px;
       color: #777777;
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 600;
-      letter-spacing: 0.19em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
     }
 
     .quote {
-      margin: clamp(54px, 8vw, 82px) 0 0;
+      max-width: 570px;
+      margin: clamp(58px, 9vh, 92px) auto 0;
       color: #8b8b8b;
       font-size: clamp(12px, 1.6vw, 14px);
       font-weight: 400;
@@ -153,10 +169,10 @@
     }
 
     .quiet-rule {
-      width: 28px;
+      width: 36px;
       height: 1px;
-      margin: 0 auto 23px;
-      background: #343434;
+      margin: 0 auto 25px;
+      background: #3a3a3a;
       opacity: var(--site-decoration-opacity);
     }
 
@@ -167,21 +183,31 @@
       }
 
       .hours-block {
-        gap: 10px;
+        gap: 11px;
+      }
+
+      .hours-number {
+        font-size: clamp(112px, 31vw, 160px);
       }
 
       .time-units {
-        gap: clamp(17px, 6vw, 28px);
+        gap: clamp(15px, 5vw, 24px);
+        margin-top: 34px;
+        padding: 19px 25px;
       }
 
       .unit {
-        min-width: 45px;
+        min-width: 48px;
+      }
+
+      .unit-separator {
+        padding-bottom: 14px;
+        font-size: 24px;
       }
 
       .quote {
         max-width: 300px;
-        margin-right: auto;
-        margin-left: auto;
+        margin-top: 62px;
       }
     }
 
@@ -211,7 +237,7 @@
       <div class="countdown" role="timer" aria-live="off" aria-label="744 total hours remaining">
         <div class="hours-block">
           <span class="hours-number" id="hours">744</span>
-          <span class="hours-label">Total Hours</span>
+          <span class="hours-label">Total hours remaining</span>
         </div>
 
         <div class="time-units" aria-label="Minutes and seconds remaining">
@@ -219,6 +245,7 @@
             <span class="unit-value" id="minutes">00</span>
             <span class="unit-label">Minutes</span>
           </div>
+          <span class="unit-separator" aria-hidden="true">:</span>
           <div class="unit">
             <span class="unit-value" id="seconds">00</span>
             <span class="unit-label">Seconds</span>
@@ -258,7 +285,7 @@
 
       function readSavedDeadline() {
         try {
-          const prefix = `${encodeURIComponent(COOKIE_NAME)}=`;
+          const prefix = encodeURIComponent(COOKIE_NAME) + "=";
           const savedCookie = document.cookie
             .split(";")
             .map(cookie => cookie.trim())
@@ -286,7 +313,7 @@
 
         try {
           // Keep the original deadline across browser sessions and restarts.
-          document.cookie = `${encodeURIComponent(COOKIE_NAME)}=${value}; Max-Age=${COOKIE_MAX_AGE}; Path=/; SameSite=Lax${SECURE_ATTRIBUTE}`;
+          document.cookie = encodeURIComponent(COOKIE_NAME) + "=" + value + "; Max-Age=" + COOKIE_MAX_AGE + "; Path=/; SameSite=Lax" + SECURE_ATTRIBUTE;
         } catch (error) {
           console.warn("Could not save the countdown cookie.", error);
         }
@@ -328,7 +355,7 @@
         elements.seconds.textContent = pad(seconds);
         elements.countdown.setAttribute(
           "aria-label",
-          `${totalHours} total hours, ${minutes} minutes and ${seconds} seconds remaining`
+          totalHours + " total hours, " + minutes + " minutes and " + seconds + " seconds remaining"
         );
 
         if (remainingMs === 0) {
