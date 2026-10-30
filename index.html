@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050505">
+  <meta name="description" content="31 days to tomorrow. Make the time count.">
+  <title>31 Days to Tomorrow</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --background: #050505;
+      --foreground: #f5f5f5;
+      --muted: #858585;
+      --faint: #555555;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      background: var(--background);
+      color: var(--foreground);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .app {
+      display: grid;
+      min-height: 100vh;
+      min-height: 100svh;
+      width: 100%;
+      place-items: center;
+      overflow: hidden;
+      padding: 48px 24px;
+      background: var(--background);
+    }
+
+    .content {
+      width: min(100%, 760px);
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--foreground);
+      font-size: clamp(34px, 6.5vw, 66px);
+      font-weight: 750;
+      letter-spacing: -0.065em;
+      line-height: 1.02;
+    }
+
+    .countdown {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: clamp(38px, 7vw, 68px);
+    }
+
+    .hours-block {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .hours-number {
+      display: block;
+      font-size: clamp(112px, 23vw, 218px);
+      font-weight: 720;
+      letter-spacing: -0.095em;
+      line-height: 0.82;
+      font-variant-numeric: tabular-nums lining-nums;
+    }
+
+    .hours-label {
+      color: #a0a0a0;
+      font-size: clamp(12px, 1.7vw, 15px);
+      font-weight: 650;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .time-units {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: clamp(22px, 5vw, 48px);
+      margin-top: clamp(32px, 5vw, 48px);
+    }
+
+    .unit {
+      min-width: 54px;
+    }
+
+    .unit-value {
+      display: block;
+      color: #ededed;
+      font-size: clamp(24px, 4vw, 35px);
+      font-weight: 560;
+      letter-spacing: -0.045em;
+      line-height: 1;
+      font-variant-numeric: tabular-nums lining-nums;
+    }
+
+    .unit-label {
+      display: block;
+      margin-top: 10px;
+      color: #777777;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.19em;
+      text-transform: uppercase;
+    }
+
+    .quote {
+      margin: clamp(54px, 8vw, 82px) 0 0;
+      color: #8b8b8b;
+      font-size: clamp(12px, 1.6vw, 14px);
+      font-weight: 400;
+      letter-spacing: 0.005em;
+      line-height: 1.6;
+    }
+
+    .quote-mark {
+      color: #c6c6c6;
+    }
+
+    .quiet-rule {
+      width: 28px;
+      height: 1px;
+      margin: 0 auto 23px;
+      background: #343434;
+    }
+
+    @media (max-width: 480px) {
+      .app {
+        padding-right: 18px;
+        padding-left: 18px;
+      }
+
+      .hours-block {
+        gap: 10px;
+      }
+
+      .time-units {
+        gap: clamp(17px, 6vw, 28px);
+      }
+
+      .unit {
+        min-width: 45px;
+      }
+
+      .quote {
+        max-width: 300px;
+        margin-right: auto;
+        margin-left: auto;
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .content {
+        animation: arrive 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      }
+
+      @keyframes arrive {
+        from {
+          opacity: 0;
+          transform: translateY(9px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="content" aria-label="Countdown to tomorrow">
+      <h1>31 days to tomorrow</h1>
+
+      <div class="countdown" role="timer" aria-live="off" aria-label="Time remaining">
+        <div class="hours-block">
+          <span class="hours-number" id="hours">744</span>
+          <span class="hours-label">Total Hours</span>
+        </div>
+
+        <div class="time-units" aria-label="Minutes and seconds remaining within total hours">
+          <div class="unit">
+            <span class="unit-value" id="minutes">00</span>
+            <span class="unit-label">Minutes</span>
+          </div>
+          <div class="unit">
+            <span class="unit-value" id="seconds">00</span>
+            <span class="unit-label">Seconds</span>
+          </div>
+        </div>
+      </div>
+
+      <blockquote class="quote">
+        <div class="quiet-rule" aria-hidden="true"></div>
+        <span class="quote-mark">“</span>An idiot in motion goes farther than a genius at rest<span class="quote-mark">.”</span>
+      </blockquote>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const DURATION_MS = 31 * 24 * 60 * 60 * 1000;
+      const COOKIE_NAME = "daysToTomorrowDeadline";
+      const STORAGE_NAME = "daysToTomorrowDeadline";
+      const COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
+      const SECURE_ATTRIBUTE = window.location.protocol === "https:" ? "; Secure" : "";
+
+      const elements = {
+        hours: document.getElementById("hours"),
+        minutes: document.getElementById("minutes"),
+        seconds: document.getElementById("seconds"),
+        countdown: document.querySelector(".countdown")
+      };
+
+      const pad = value => String(value).padStart(2, "0");
+
+      function readCookieDeadline() {
+        try {
+          const prefix = `${encodeURIComponent(COOKIE_NAME)}=`;
+          const match = document.cookie
+            .split(";")
+            .map(cookie => cookie.trim())
+            .find(cookie => cookie.startsWith(prefix));
+
+          if (!match) return null;
+
+          const value = Number(decodeURIComponent(match.slice(prefix.length)));
+          return Number.isSafeInteger(value) && value > 0 ? value : null;
+        } catch (error) {
+          console.warn("Could not read the countdown cookie.", error);
+          return null;
+        }
+      }
+
+      function writeCookieDeadline(deadline) {
+        try {
+          document.cookie =
+            `${encodeURIComponent(COOKIE_NAME)}=${encodeURIComponent(String(deadline))}; Max-Age=${COOKIE_MAX_AGE}; Path=/; SameSite=Lax${SECURE_ATTRIBUTE}`;
+        } catch (error) {
+          console.warn("Could not save the countdown cookie.", error);
+        }
+      }
+
+      function readLocalDeadline() {
+        try {
+          const value = Number(window.localStorage.getItem(STORAGE_NAME));
+          return Number.isSafeInteger(value) && value > 0 ? value : null;
+        } catch (error) {
+          return null;
+        }
+      }
+
+      function writeLocalDeadline(deadline) {
+        try {
+          window.localStorage.setItem(STORAGE_NAME, String(deadline));
+        } catch (error) {
+          console.warn("Local storage is unavailable; cookie persistence will be used.", error);
+        }
+      }
+
+      function getOrCreateDeadline() {
+        const cookieDeadline = readCookieDeadline();
+        if (cookieDeadline !== null) return cookieDeadline;
+
+        const localDeadline = readLocalDeadline();
+        if (localDeadline !== null) {
+          writeCookieDeadline(localDeadline);
+          return localDeadline;
+        }
+
+        // Start on the next whole second so the first visible reading is 744 hours.
+        const startTime = Math.ceil(Date.now() / 1000) * 1000;
+        const deadline = startTime + DURATION_MS;
+
+        writeCookieDeadline(deadline);
+        writeLocalDeadline(deadline);
+        return deadline;
+      }
+
+      const targetTime = getOrCreateDeadline();
+      let timerId = null;
+
+      function renderCountdown() {
+        const remainingMs = Math.max(0, targetTime - Date.now());
+        const totalSeconds = Math.floor(remainingMs / 1000);
+        const totalHours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        elements.hours.textContent = String(totalHours);
+        elements.minutes.textContent = pad(minutes);
+        elements.seconds.textContent = pad(seconds);
+        elements.countdown.setAttribute(
+          "aria-label",
+          `${totalHours} total hours, ${minutes} minutes and ${seconds} seconds remaining`
+        );
+
+        if (remainingMs === 0) {
+          timerId = null;
+          return;
+        }
+
+        // Derive each update from the deadline to avoid drift and recover from sleep.
+        timerId = window.setTimeout(renderCountdown, 1000 - (Date.now() % 1000));
+      }
+
+      function refreshCountdown() {
+        if (timerId !== null) window.clearTimeout(timerId);
+        renderCountdown();
+      }
+
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) refreshCountdown();
+      });
+      window.addEventListener("pageshow", refreshCountdown);
+      window.addEventListener("focus", refreshCountdown);
+
+      refreshCountdown();
+    })();
+  </script>
+</body>
+</html>
