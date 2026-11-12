@@ -269,6 +269,31 @@
       background: #3a3a3a;
     }
 
+    /* Count-up since November 8 */
+    .since {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin-top: clamp(36px, 6vh, 56px);
+    }
+
+    .since-value {
+      color: var(--ink-soft);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      font-variant-numeric: tabular-nums lining-nums;
+    }
+
+    .since-note {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
     /* Ending */
     .app.is-done .time-units {
       opacity: 0.3;
@@ -330,6 +355,7 @@
       .content > :nth-child(2) { animation-delay: 120ms; }
       .content > :nth-child(3) { animation-delay: 240ms; }
       .content > :nth-child(4) { animation-delay: 360ms; }
+      .content > :nth-child(5) { animation-delay: 480ms; }
 
       .day.is-today {
         animation: breathe 2.8s ease-in-out infinite;
@@ -394,6 +420,11 @@
         <div class="quiet-rule" aria-hidden="true"></div>
         <span class="quote-mark">“</span>An idiot in motion goes farther than a genius at rest<span class="quote-mark">.”</span>
       </blockquote>
+
+      <div class="since">
+        <span class="since-value" id="since" role="timer" aria-label="Time since November 8">0d 00h 00m 00s</span>
+        <span class="since-note">Stand on it</span>
+      </div>
     </section>
   </main>
 
@@ -597,6 +628,16 @@
       window.addEventListener("focus", refreshCountdown);
 
       refreshCountdown();
+
+      // Count up from midnight Nov 8, 2026 (viewer's local time); keeps running after the countdown ends.
+      const SINCE_START = new Date(2026, 10, 8).getTime();
+      const sinceEl = document.getElementById("since");
+      function renderSince() {
+        const s = Math.max(0, Math.floor((Date.now() - SINCE_START) / 1000));
+        sinceEl.textContent = Math.floor(s / 86400) + "d " + pad(Math.floor(s / 3600) % 24) + "h " + pad(Math.floor(s / 60) % 60) + "m " + pad(s % 60) + "s";
+      }
+      renderSince();
+      window.setInterval(renderSince, 1000);
     })();
   </script>
 </body>
