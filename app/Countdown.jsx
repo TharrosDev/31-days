@@ -101,7 +101,8 @@ export default function Countdown() {
 
   return (
     <main className={styles.app}>
-      <section className={styles.content} aria-label="Countdown to tomorrow">
+      <header className={styles.top}>
+        <h1>31 days to tomorrow</h1>
         <Link
           className={styles.streak}
           href="/complete"
@@ -109,8 +110,9 @@ export default function Countdown() {
         >
           Streak <strong>{streak}</strong>
         </Link>
-        <h1>31 days to tomorrow</h1>
+      </header>
 
+      <section className={styles.center} aria-label="Countdown to tomorrow">
         <div
           className={styles.countdown}
           role="timer"
@@ -134,9 +136,11 @@ export default function Countdown() {
             </div>
           </div>
         </div>
+      </section>
 
+      <footer className={styles.bottom}>
         <div className={styles.days}>
-          <span className={styles.daysLabel}>
+          <span className={styles.label}>
             Day <strong>{Math.max(0, dayIndex) + 1}</strong> of 31
           </span>
           <div className={styles.dayTrack} aria-hidden="true">
@@ -150,12 +154,11 @@ export default function Countdown() {
         </div>
 
         <blockquote className={styles.quote}>
-          <div className={styles.quietRule} aria-hidden="true" />
           <span className={styles.quoteMark}>“</span>An idiot in motion goes farther than a genius at rest<span className={styles.quoteMark}>.”</span>
         </blockquote>
 
         <SinceRestart />
-      </section>
+      </footer>
     </main>
   );
 }
@@ -180,9 +183,9 @@ function SinceRestart() {
 
   return (
     <div className={styles.since}>
+      <span className={styles.label}>Stand on it</span>
       <span className={styles.sinceValue} role="timer" aria-label="Time since November 23">{text}</span>
-      <span className={styles.sinceNote}>Stand on it</span>
-      <span className={styles.sinceNote}>PR <strong className={styles.prValue}>{PR_DAYS} days</strong></span>
+      <span className={styles.label}>PR <strong>{PR_DAYS} days</strong></span>
     </div>
   );
 }

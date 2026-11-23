@@ -1,50 +1,57 @@
+/* Full-viewport frame: title bar, countdown, and a footer band that fit one screen on desktop. */
 .app {
   position: relative;
   display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: clamp(28px, 5vh, 48px);
   min-height: 100vh;
   min-height: 100svh;
   width: 100%;
-  place-items: center;
   overflow: hidden;
-  padding: max(48px, env(safe-area-inset-top)) 24px max(48px, env(safe-area-inset-bottom));
+  padding:
+    max(28px, env(safe-area-inset-top))
+    max(clamp(20px, 4vw, 56px), env(safe-area-inset-right))
+    max(28px, env(safe-area-inset-bottom))
+    max(clamp(20px, 4vw, 56px), env(safe-area-inset-left));
   isolation: isolate;
 }
 
-.content {
+.app > * {
   position: relative;
   z-index: 3;
-  width: min(100%, 820px);
-  text-align: center;
 }
 
-.content h1 {
-  margin: 0;
-  font-size: clamp(34px, 6.5vw, 66px);
-  font-weight: 750;
-  letter-spacing: -0.055em;
-  line-height: 1.02;
-  text-wrap: balance;
-}
-
-/* Streak: completed 31-day runs, links to the completed page */
-.streak {
-  display: inline-flex;
+/* Title bar */
+.top {
+  display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: clamp(26px, 5vh, 42px);
-  padding: 7px 14px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--panel);
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.top h1 {
+  margin: 0;
+  font-size: clamp(20px, 2.1vw, 28px);
+  font-weight: 720;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Small uppercase labels share one voice */
+.label,
+.hoursLabel,
+.unitLabel,
+.streak {
   color: var(--muted);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  text-decoration: none;
-  transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
+  white-space: nowrap;
 }
 
+.label strong,
 .streak strong {
   color: var(--ink-soft);
   font-weight: 650;
@@ -52,9 +59,24 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* Streak: completed 31-day runs, links to the completed page */
+.streak {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel);
+  text-decoration: none;
+  transition: color 0.3s var(--ease), border-color 0.3s var(--ease), background-color 0.3s var(--ease);
+}
+
 .streak:hover {
   color: var(--ink-soft);
   border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.045);
 }
 
 .streak:focus-visible {
@@ -62,11 +84,16 @@
   outline-offset: 3px;
 }
 
+/* Countdown */
+.center {
+  display: grid;
+  place-items: center;
+}
+
 .countdown {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: clamp(48px, 8vh, 82px);
 }
 
 .hoursBlock {
@@ -74,7 +101,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
+  gap: clamp(14px, 2vh, 20px);
 }
 
 /* Soft light behind the big number */
@@ -84,16 +111,17 @@
   top: 50%;
   left: 50%;
   z-index: -1;
-  width: 150%;
+  width: 160%;
   aspect-ratio: 2 / 1;
   transform: translate(-50%, -58%);
-  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.07), transparent);
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.075), transparent);
   pointer-events: none;
 }
 
 .hoursNumber {
   display: block;
-  font-size: clamp(124px, 25vw, 250px);
+  /* Sized by the shorter side so the number never pushes the footer off a laptop screen */
+  font-size: clamp(124px, min(27vw, 36vh), 340px);
   font-weight: 750;
   letter-spacing: -0.085em;
   line-height: 0.82;
@@ -104,42 +132,28 @@
   color: #f7f7f7;
 }
 
-.hoursLabel,
-.unitLabel,
-.daysLabel {
-  color: var(--muted);
-  font-weight: 600;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.hoursLabel {
-  font-size: 11px;
-  letter-spacing: 0.22em;
-}
-
 .timeUnits {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(20px, 4vw, 34px);
-  margin-top: clamp(34px, 5vw, 44px);
-  padding: 22px 32px;
+  gap: clamp(20px, 3vw, 32px);
+  margin-top: clamp(28px, 4.5vh, 44px);
+  padding: 20px 32px;
   border: 1px solid var(--line);
   border-radius: 14px;
   background: var(--panel);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 24px 60px -30px rgba(0, 0, 0, 0.9);
-  backdrop-filter: blur(6px);
 }
 
 .unit {
   min-width: 62px;
+  text-align: center;
 }
 
 .unitValue {
   display: block;
   color: #f0f0f0;
-  font-size: clamp(27px, 4vw, 36px);
+  font-size: clamp(27px, 3.4vw, 36px);
   font-weight: 620;
   letter-spacing: -0.04em;
   line-height: 1;
@@ -158,27 +172,28 @@
 .unitLabel {
   display: block;
   margin-top: 9px;
-  font-size: 11px;
   letter-spacing: 0.2em;
 }
 
-/* 31-day track */
-.days {
+/* Footer band: day track, quote, count-up */
+.bottom {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 40px;
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+}
+
+.days,
+.since {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  margin-top: clamp(40px, 6vh, 56px);
+  gap: 12px;
 }
 
-.daysLabel {
-  font-size: 11px;
-  letter-spacing: 0.22em;
-}
-
-.daysLabel strong {
-  color: var(--ink-soft);
-  font-weight: 650;
+.days {
+  align-items: flex-start;
 }
 
 .dayTrack {
@@ -205,14 +220,14 @@
 }
 
 .quote {
-  max-width: 570px;
-  margin: clamp(52px, 8vh, 84px) auto 0;
+  max-width: 420px;
+  margin: 0 auto;
   color: var(--muted);
-  font-size: clamp(12px, 1.6vw, 14px);
-  font-weight: 400;
+  font-size: 14px;
   font-style: normal;
   letter-spacing: 0.005em;
   line-height: 1.6;
+  text-align: center;
   text-wrap: balance;
 }
 
@@ -220,48 +235,54 @@
   color: var(--ink-soft);
 }
 
-.quietRule {
-  width: 36px;
-  height: 1px;
-  margin: 0 auto 25px;
-  background: #3a3a3a;
-}
-
 /* Count-up since the Nov 23 restart, with PR */
 .since {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  margin-top: clamp(36px, 6vh, 56px);
+  align-items: flex-end;
+  text-align: right;
 }
 
 .sinceValue {
-  color: var(--ink-soft);
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 620;
+  letter-spacing: -0.01em;
+  line-height: 1;
   font-variant-numeric: tabular-nums lining-nums;
+  white-space: nowrap;
 }
 
-.sinceNote {
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-}
+/* Below this the three footer columns no longer fit side by side */
+@media (max-width: 900px) {
+  .bottom {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 30px;
+    padding-top: 30px;
+  }
 
-.prValue {
-  margin-left: 6px;
-  color: var(--ink-soft);
-  font-weight: 600;
+  .days,
+  .since {
+    align-items: center;
+    text-align: center;
+  }
+
+  .since {
+    order: 2;
+  }
+
+  .quote {
+    order: 3;
+    max-width: 320px;
+  }
 }
 
 @media (max-width: 480px) {
-  .app {
-    padding-right: 18px;
-    padding-left: 18px;
+  .top h1 {
+    font-size: 20px;
+  }
+
+  .streak {
+    padding: 7px 12px;
   }
 
   .hoursBlock {
@@ -274,8 +295,8 @@
 
   .timeUnits {
     gap: clamp(15px, 5vw, 24px);
-    margin-top: 34px;
-    padding: 19px 25px;
+    margin-top: 30px;
+    padding: 18px 24px;
   }
 
   .unit {
@@ -295,23 +316,15 @@
     width: 5px;
     height: 16px;
   }
-
-  .quote {
-    max-width: 300px;
-    margin-top: 56px;
-  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .content > * {
+  .app > * {
     animation: arrive 1000ms var(--ease) both;
   }
 
-  .content > :nth-child(2) { animation-delay: 120ms; }
-  .content > :nth-child(3) { animation-delay: 240ms; }
-  .content > :nth-child(4) { animation-delay: 360ms; }
-  .content > :nth-child(5) { animation-delay: 480ms; }
-  .content > :nth-child(6) { animation-delay: 600ms; }
+  .app > :nth-child(2) { animation-delay: 140ms; }
+  .app > :nth-child(3) { animation-delay: 300ms; }
 
   .day.isToday {
     animation: breathe 2.8s ease-in-out infinite;
