@@ -227,7 +227,7 @@
   background: #3a3a3a;
 }
 
-/* Count-up since November 8 */
+/* Count-up since the Nov 23 restart, with PR */
 .since {
   display: flex;
   flex-direction: column;
@@ -250,6 +250,12 @@
   font-weight: 600;
   letter-spacing: 0.22em;
   text-transform: uppercase;
+}
+
+.prValue {
+  margin-left: 6px;
+  color: var(--ink-soft);
+  font-weight: 600;
 }
 
 @media (max-width: 480px) {
