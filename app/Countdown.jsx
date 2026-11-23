@@ -154,20 +154,23 @@ export default function Countdown() {
           <span className={styles.quoteMark}>“</span>An idiot in motion goes farther than a genius at rest<span className={styles.quoteMark}>.”</span>
         </blockquote>
 
-        <SinceNov8 />
+        <SinceRestart />
       </section>
     </main>
   );
 }
 
-// Counts up from midnight Nov 8, 2026 in the viewer's local time; keeps running across countdown restarts.
-function SinceNov8() {
+// Counts up from the Nov 23, 2026 restart (Toronto time); keeps running across countdown restarts.
+// The previous run (from Nov 8) set the PR of 13 days.
+const SINCE_START = new Date("2026-11-23T14:18:00-05:00").getTime();
+const PR_DAYS = 13;
+
+function SinceRestart() {
   const [text, setText] = useState("0d 00h 00m 00s");
 
   useEffect(() => {
-    const start = new Date(2026, 10, 8).getTime();
     function render() {
-      const s = Math.max(0, Math.floor((Date.now() - start) / 1000));
+      const s = Math.max(0, Math.floor((Date.now() - SINCE_START) / 1000));
       setText(Math.floor(s / 86400) + "d " + pad(Math.floor(s / 3600) % 24) + "h " + pad(Math.floor(s / 60) % 60) + "m " + pad(s % 60) + "s");
     }
     render();
@@ -177,8 +180,9 @@ function SinceNov8() {
 
   return (
     <div className={styles.since}>
-      <span className={styles.sinceValue} role="timer" aria-label="Time since November 8">{text}</span>
+      <span className={styles.sinceValue} role="timer" aria-label="Time since November 23">{text}</span>
       <span className={styles.sinceNote}>Stand on it</span>
+      <span className={styles.sinceNote}>PR <strong className={styles.prValue}>{PR_DAYS} days</strong></span>
     </div>
   );
 }
