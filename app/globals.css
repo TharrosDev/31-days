@@ -33,6 +33,11 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+::selection {
+  background: var(--ink);
+  color: var(--bg);
+}
+
 /* Film grain */
 body::before {
   content: "";
