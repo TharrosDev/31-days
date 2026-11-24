@@ -163,9 +163,9 @@ export default function Countdown() {
   );
 }
 
-// Counts up from midnight Nov 23, 2026 (Toronto time); keeps running across countdown restarts.
-// The previous run (from Nov 8) set the PR of 13 days.
-const SINCE_START = new Date("2026-11-23T00:00:00-05:00").getTime();
+// Counts up from 10:19 PM Nov 23, 2026 (Toronto time); keeps running across countdown restarts.
+// The run from Nov 8 set the PR of 13 days.
+const SINCE_START = new Date("2026-11-23T22:19:44-05:00").getTime();
 const PR_DAYS = 13;
 
 function SinceRestart() {
